@@ -118,13 +118,24 @@ class IndexController{
 		$data['navs'] = $this->navs();
 		$data['item'] = $item;
 		$data['url'] = (isset($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['HTTP_HOST'].end($data['navs']);
+
+		if(in_array($ext,['csv','doc','docx','odp','ods','odt','pot','potm','potx','pps','ppsx','ppsxm','ppt','pptm','pptx','rtf','xls','xlsx'])){
+			$url = 'https://view.officeapps.live.com/op/view.aspx?src='.urlencode($item['downloadUrl']);
+			return view::direct($url);
+			//return view::load('show/pdf')->with($data);
+		}
 		
 		if(in_array($ext,['bmp','jpg','jpeg','png','gif'])){
 			return view::load('show/image')->with($data);
 		}
-		if(in_array($ext,['mp4','mkv','webm','wmv'])){
+		if(in_array($ext,['mp4','webm'])){
 			return view::load('show/video')->with($data);
 		}
+		
+		if(in_array($ext,['mp4','webm','avi','mpg', 'mpeg', 'rm', 'rmvb', 'mov', 'wmv', 'mkv', 'asf'])){
+			return view::load('show/video2')->with($data);
+		}
+		
 		if(in_array($ext,['ogg','mp3','wav'])){
 			return view::load('show/audio')->with($data);
 		}
